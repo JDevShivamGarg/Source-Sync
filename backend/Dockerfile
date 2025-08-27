@@ -19,4 +19,4 @@ COPY ./ /app/
 # Gunicorn will be the entry point in production.
 # This command tells Docker what to run when the container starts.
 # It starts 4 worker processes for the Flask app on port 5000.
-CMD ["gunicorn", "--workers", "4", "--bind", "0.0.0.0:5000", "app:app"]
+CMD ["gunicorn", "--workers", "1", "--bind", "0.0.0.0:5000", "app:app"]
