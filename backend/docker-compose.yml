@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  # The Redis service for our message broker and results backend
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+
+  # The Flask API service
+  api:
+    build: ./backend  # Tells Docker Compose to build the image from the ./backend folder
+    container_name: flask-api
+    ports:
+      - "5000:5000"  # Exposes the container's port 5000 to your machine's port 5000
+    environment:
+      # This is where you would put your API key for local development
+      # For production, this would come from AWS Secrets Manager
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+    depends_on:
+      - redis  # Ensures Redis starts before the API does
+
+  # The Celery worker service
+  worker:
+    build: ./backend  # Uses the same Docker image as the API
+    container_name: celery-worker
+    # The command to start the Celery worker
+    command: celery -A worker.celery_app worker --loglevel=info
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+    depends_on:
+      - redis # Ensures Redis starts before the worker does

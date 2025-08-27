@@ -1,0 +1,20 @@
+# render.yaml
+
+services:
+  # A name for our web service
+  - type: web
+    name: source-sync-api
+    # Use the Docker environment
+    env: docker
+    # The root directory for the service, relative to the repo root
+    repo: https://github.com/your-username/your-repo-name # IMPORTANT: Change this!
+    rootDir: ./backend
+    # Health Check Path: Render uses this to know if your app is running.
+    healthCheckPath: /
+    # Environment variables (secrets)
+    envVars:
+      - key: GEMINI_API_KEY
+        # This tells Render to use a secret value you'll set in the dashboard
+        fromSecret: true
+      - key: PYTHON_VERSION
+        value: "3.11" # Helps Render use the correct Python version
