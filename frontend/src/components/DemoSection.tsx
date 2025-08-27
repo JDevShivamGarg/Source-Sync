@@ -48,7 +48,8 @@ const DemoSection = () => {
     formData.append("source_file", txtFile);
 
     try {
-      const response = await fetch("http://localhost:5000/analyze", {
+      const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:5000";
+      const response = await fetch(`${apiUrl}/analyze`, {
         method: "POST",
         body: formData,
       });
